@@ -1,7 +1,8 @@
 
 /**
+ * 测试数据
+ *
  * @author YI
- * @deprecated
  * @date create in 2021/9/2 18:39
  */
 public class TestModel {
@@ -10,10 +11,6 @@ public class TestModel {
     Long svip_remain;
     String name;
     double money;
-
-    public TestModel() {
-        super();
-    }
 
     public TestModel(int app_id, Integer svip_level, Long svip_remain, String name, double money) {
         this.app_id = app_id;

@@ -28,8 +28,9 @@ import java.util.Map;
 
 /**
  * Parquet转换工具类
+ *
  * @author YI
- * @deprecated Parquet转换工具类
+ * @date 2021-9-3 18:30:11
  */
 public class ParquetUtil {
     /**

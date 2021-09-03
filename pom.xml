@@ -10,6 +10,7 @@
 
     <name>parquet-plus</name>
     <description>一个增强parquet文件方便读写的工具类</description>
+    <url>https://github.com/HWYWL/parquet-plus</url>
 
     <licenses>
         <license>

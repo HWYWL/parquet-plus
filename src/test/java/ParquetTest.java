@@ -16,24 +16,46 @@ import java.util.Map;
 public class ParquetTest {
     String filePath = "F:\\a.parquet";
 
+    /**
+     * 写入一个数据到parquet文件
+     *
+     * @throws IOException
+     * @throws CustomException
+     */
     @Test
     public void ParquetWriteTest() throws IOException, CustomException {
         TestModel model = getModel();
         ParquetUtil.writerParquet(filePath, model);
     }
 
+    /**
+     * 写入多个数据到parquet文件
+     *
+     * @throws IOException
+     * @throws CustomException
+     */
     @Test
     public void ParquetWriteListTest() throws IOException, CustomException {
         List<TestModel> models = getModels();
         ParquetUtil.writerParquet(filePath, models);
     }
 
+    /**
+     * 将parquet文件转为对象集合
+     *
+     * @throws IOException
+     */
     @Test
     public void ParquetReadBeanTest() throws IOException {
         List<TestModel> models = ParquetUtil.readParquetBean(filePath, TestModel.class);
         System.out.println(models);
     }
 
+    /**
+     * 将parquet文件转为Map集合
+     *
+     * @throws IOException
+     */
     @Test
     public void ParquetReadMapTest() throws IOException {
         List<Map<String, Object>> maps = ParquetUtil.readParquetMap(filePath);
@@ -46,14 +68,7 @@ public class ParquetTest {
      * @return
      */
     private TestModel getModel() {
-        TestModel testModel = new TestModel();
-        testModel.setApp_id(2);
-        testModel.setMoney(2.03);
-        testModel.setSvip_level(1);
-        testModel.setSvip_remain(1L);
-        testModel.setName("校花");
-
-        return testModel;
+        return new TestModel(2, 3, 6L, "校花", 10);
     }
 
     /**
@@ -65,13 +80,7 @@ public class ParquetTest {
         List<TestModel> arrayList = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            TestModel testModel = new TestModel();
-            testModel.setApp_id(2);
-            testModel.setMoney(2.03);
-            testModel.setSvip_level(1);
-            testModel.setSvip_remain(1L);
-            testModel.setName("校花");
-            arrayList.add(testModel);
+            TestModel testModel = new TestModel(2, 3, 6L, "校花", 10);
         }
 
         return arrayList;
