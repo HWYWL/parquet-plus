@@ -26,6 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Parquet转换工具类
+ * @author YI
+ * @deprecated Parquet转换工具类
+ */
 public class ParquetUtil {
     /**
      * 获取parquetWriter

@@ -1,7 +1,7 @@
 
 /**
  * @author YI
- * @description
+ * @deprecated
  * @date create in 2021/9/2 18:39
  */
 public class TestModel {
