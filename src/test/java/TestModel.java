@@ -59,4 +59,15 @@ public class TestModel {
     public void setMoney(double money) {
         this.money = money;
     }
+
+    @Override
+    public String toString() {
+        return "TestModel{" +
+                "app_id=" + app_id +
+                ", svip_level=" + svip_level +
+                ", svip_remain=" + svip_remain +
+                ", name='" + name + '\'' +
+                ", money=" + money +
+                '}';
+    }
 }

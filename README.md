@@ -80,6 +80,17 @@ public class ParquetTest {
     }
 
     /**
+     * 将parquet文件转为对象集合,并只拿2条数据
+     *
+     * @throws IOException
+     */
+    @Test
+    public void ParquetReadBeanMaxLineTest() throws IOException {
+        List<TestModel> models = ParquetUtil.readParquetBean(filePath, 2, TestModel.class);
+        System.out.println(models);
+    }
+
+    /**
      * 测试数据
      *
      * @return
