@@ -80,7 +80,7 @@ public class ParquetTest {
         List<TestModel> arrayList = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            TestModel testModel = new TestModel(2, 3, 6L, "校花", 10);
+            arrayList.add(new TestModel(2, 3, 6L, "校花", 10));
         }
 
         return arrayList;
