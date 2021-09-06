@@ -17,13 +17,13 @@
 <dependency>
     <groupId>com.github.hwywl</groupId>
     <artifactId>parquet-plus</artifactId>
-    <version>1.0.-RELEASE</version>
+    <version>1.0.3-RELEASE</version>
 </dependency>
 ```
 
 **Gradle**
 ```
-implementation 'com.github.hwywl:parquet-plus:1.0.-RELEASE'
+implementation 'com.github.hwywl:parquet-plus:1.0.3-RELEASE'
 ```
 
 ### 使用
