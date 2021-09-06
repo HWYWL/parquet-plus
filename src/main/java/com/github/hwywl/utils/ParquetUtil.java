@@ -34,37 +34,34 @@ import java.util.Map;
  */
 public class ParquetUtil {
     /**
-     * 获取parquetWriter
+     * 将数据写入parquet文件
      *
      * @param parquetPath parquet路径
-     * @return
+     * @param bean        对象
      */
     public static <T> void writerParquet(String parquetPath, T bean) throws IOException, CustomException {
-        MessageType messageType = getInstance(bean.getClass());
-        Group group = getGroup(messageType, bean);
-
-        ParquetWriter<Group> writer = getParquetWriter(parquetPath, messageType);
+        Group group = getGroup(bean);
+        ParquetWriter<Group> writer = getParquetWriter(parquetPath, bean.getClass());
 
         writer.write(group);
         writer.close();
     }
 
     /**
-     * 获取parquetWriter
+     * 将集合数据写入parquet文件
      *
      * @param parquetPath parquet路径
-     * @return
+     * @param beans       数据集合
      */
     public static <T> void writerParquet(String parquetPath, List<T> beans) throws IOException, CustomException {
         if (CollUtil.isEmpty(beans)) {
             return;
         }
 
-        MessageType messageType = getInstance(beans.get(0).getClass());
-        ParquetWriter<Group> writer = getParquetWriter(parquetPath, messageType);
+        ParquetWriter<Group> writer = getParquetWriter(parquetPath, beans.get(0).getClass());
 
         for (T bean : beans) {
-            Group group = getGroup(messageType, bean);
+            Group group = getGroup(bean);
             writer.write(group);
         }
 
@@ -145,15 +142,50 @@ public class ParquetUtil {
      * 获取生成parquet文件的 ParquetWriter
      *
      * @param parquetPath 生成parquet的路径
-     * @param messageType 类型
-     * @return
+     * @param clazz       对象字节码
+     * @return ParquetWriter
      * @throws IOException
      */
-    public static ParquetWriter<Group> getParquetWriter(String parquetPath, MessageType messageType) throws IOException {
+    public static <T> ParquetWriter<Group> getParquetWriter(String parquetPath, Class<T> clazz) throws IOException, CustomException {
+        MessageType messageType = getInstance(clazz);
         Path path = new Path(parquetPath);
         Configuration configuration = new Configuration();
         GroupWriteSupport.setSchema(messageType, configuration);
         return new ParquetWriter<>(path, configuration, new GroupWriteSupport());
+    }
+
+    /**
+     * 自动构建Group
+     *
+     * @param bean 数据
+     * @return
+     */
+    public static <T> Group getGroup(T bean) throws CustomException {
+        Class<?> clazz = bean.getClass();
+        GroupFactory factory = new SimpleGroupFactory(getInstance(clazz));
+        Group group = factory.newGroup();
+        Map<String, Object> map = BeanUtil.beanToMap(bean);
+
+        // 生成group
+        map.forEach((key, value) -> {
+            PropertyDescriptor descriptor = BeanUtil.getPropertyDescriptor(clazz, key);
+            Class<?> propertyType = descriptor.getPropertyType();
+            if (int.class == propertyType || Integer.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).intValue());
+            } else if (long.class == propertyType || Long.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).longValue());
+            } else if (float.class == propertyType || Float.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).floatValue());
+            } else if (double.class == propertyType || Double.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).doubleValue());
+            } else if (String.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.toStr(value), ""));
+            } else if (boolean.class == propertyType || Boolean.class == propertyType) {
+                group.add(key, ObjectUtil.defaultIfNull(Convert.convert(Boolean.class, value), false));
+            }
+        });
+
+        return group;
     }
 
     /**
@@ -192,40 +224,5 @@ public class ParquetUtil {
         }
 
         return messageTypeBuilder.named("Pair");
-    }
-
-    /**
-     * 自动构建Group
-     *
-     * @param messageType 类型
-     * @param bean        数据
-     * @return
-     */
-    private static <T> Group getGroup(MessageType messageType, T bean) {
-        Class<?> clazz = bean.getClass();
-        GroupFactory factory = new SimpleGroupFactory(messageType);
-        Group group = factory.newGroup();
-        Map<String, Object> map = BeanUtil.beanToMap(bean);
-
-        // 生成group
-        map.forEach((key, value) -> {
-            PropertyDescriptor descriptor = BeanUtil.getPropertyDescriptor(clazz, key);
-            Class<?> propertyType = descriptor.getPropertyType();
-            if (int.class == propertyType || Integer.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).intValue());
-            } else if (long.class == propertyType || Long.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).longValue());
-            } else if (float.class == propertyType || Float.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).floatValue());
-            } else if (double.class == propertyType || Double.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.toDouble(value), 0).doubleValue());
-            } else if (String.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.toStr(value), ""));
-            } else if (boolean.class == propertyType || Boolean.class == propertyType) {
-                group.add(key, ObjectUtil.defaultIfNull(Convert.convert(Boolean.class, value), false));
-            }
-        });
-
-        return group;
     }
 }
