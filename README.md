@@ -17,13 +17,13 @@
 <dependency>
     <groupId>com.github.hwywl</groupId>
     <artifactId>parquet-plus</artifactId>
-    <version>1.0.1-RELEASE</version>
+    <version>1.0.2-RELEASE</version>
 </dependency>
 ```
 
 **Gradle**
 ```
-implementation 'com.github.hwywl:parquet-plus:1.0.1-RELEASE'
+implementation 'com.github.hwywl:parquet-plus:1.0.2-RELEASE'
 ```
 
 ### 使用
@@ -115,6 +115,10 @@ public class ParquetTest {
     }
 }
 ```
+
+### 1.0.2-RELEASE 版本更新
+1. 修复bug
+2. 增加更简便的API
 
 ### 1.0.1-RELEASE 版本更新
 1. 增加生成parquet文件
