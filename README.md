@@ -1,3 +1,5 @@
+# 停止维护
+此仓库停止维护，请访问：https://github.com/HWYWL/business-tools
 # parquet-plus
 一个增强parquet文件方便读写的工具类
 
